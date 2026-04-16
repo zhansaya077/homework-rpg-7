@@ -1,0 +1,33 @@
+package com.narxoz.rpg.observer;
+
+public class AchievementTracker implements GameObserver {
+
+    private boolean firstKill = false;
+    private boolean bossSlain = false;
+    private boolean firstBlood = false;
+
+    @Override
+    public void onEvent(GameEvent event) {
+
+        switch (event.getType()) {
+
+            case ATTACK_LANDED -> {
+                if (!firstBlood) {
+                    firstBlood = true;
+                    System.out.println("[ACHIEVEMENT] First Blood!");
+                }
+            }
+
+            case HERO_DIED -> {
+                System.out.println("[ACHIEVEMENT] Fallen Hero!");
+            }
+
+            case BOSS_DEFEATED -> {
+                if (!bossSlain) {
+                    bossSlain = true;
+                    System.out.println("[ACHIEVEMENT] Dragon Slayer!");
+                }
+            }
+        }
+    }
+}
