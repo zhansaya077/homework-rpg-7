@@ -88,4 +88,20 @@ public class DungeonBoss extends EventPublisher implements GameObserver {
             }
         }
     }
+   @Override
+   public void onEvent(GameEvent event) {
+
+         if (event.getType() == GameEventType.BOSS_PHASE_CHANGED) {
+
+            if (event.getValue() == 2) {
+                setStrategy(new BossPhaseTwoStrategy());
+                System.out.println("Boss switched to Phase 2");
+        }
+
+         if (event.getValue() == 3) {
+            setStrategy(new BossPhaseThreeStrategy());
+            System.out.println("Boss switched to Phase 3");
+          }
+      }
+   }
 }
