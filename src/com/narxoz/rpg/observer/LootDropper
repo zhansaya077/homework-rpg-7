@@ -1,0 +1,23 @@
+package com.narxoz.rpg.observer;
+
+import java.util.Random;
+
+public class LootDropper implements GameObserver {
+
+    private final Random random = new Random();
+
+    @Override
+    public void onEvent(GameEvent event) {
+
+        switch (event.getType()) {
+
+            case BOSS_PHASE_CHANGED -> {
+                System.out.println("[LOOT] Phase loot dropped: Potion");
+            }
+
+            case BOSS_DEFEATED -> {
+                System.out.println("[LOOT] LEGENDARY ITEM DROPPED!");
+            }
+        }
+    }
+}
