@@ -1,0 +1,91 @@
+package com.narxoz.rpg.combatant;
+
+import com.narxoz.rpg.observer.*;
+import com.narxoz.rpg.strategy.CombatStrategy;
+
+public class DungeonBoss extends EventPublisher implements GameObserver {
+
+    private final String name;
+    private int hp;
+    private final int maxHp;
+    private final int attack;
+    private final int defense;
+
+    private int phase = 1;
+    private CombatStrategy strategy;
+
+    public DungeonBoss(String name, int hp, int attack, int defense) {
+        this.name = name;
+        this.hp = hp;
+        this.maxHp = hp;
+        this.attack = attack;
+        this.defense = defense;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isAlive() {
+        return hp > 0;
+    }
+
+    public void setStrategy(CombatStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void takeDamage(int damage) {
+
+        hp = Math.max(0, hp - damage);
+
+        double percent = (double) hp / maxHp;
+
+        if (hp <= 0) {
+            notifyObservers(new GameEvent(
+                    GameEventType.BOSS_DEFEATED,
+                    name,
+                    0
+            ));
+            return;
+        }
+
+        if (percent <= 0.3 && phase != 3) {
+            phase = 3;
+            notifyObservers(new GameEvent(
+                    GameEventType.BOSS_PHASE_CHANGED,
+                    name,
+                    3
+            ));
+        } else if (percent <= 0.6 && phase != 2) {
+            phase = 2;
+            notifyObservers(new GameEvent(
+                    GameEventType.BOSS_PHASE_CHANGED,
+                    name,
+                    2
+            ));
+        }
+    }
+
+    public int attack() {
+        return strategy.calculateDamage(attack);
+    }
+
+    public int defend() {
+        return strategy.calculateDefense(defense);
+    }
+
+    @Override
+    public void onEvent(GameEvent event) {
+
+        if (event.getType() == GameEventType.BOSS_PHASE_CHANGED) {
+
+            if (event.getValue() == 2) {
+                // TODO: Phase 2 strategy
+            }
+
+            if (event.getValue() == 3) {
+                // TODO: Phase 3 strategy
+            }
+        }
+    }
+}
