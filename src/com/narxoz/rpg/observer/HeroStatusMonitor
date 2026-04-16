@@ -1,0 +1,36 @@
+package com.narxoz.rpg.observer;
+
+import com.narxoz.rpg.combatant.Hero;
+import java.util.List;
+
+public class HeroStatusMonitor implements GameObserver {
+
+    private List<Hero> heroes;
+
+    public void setHeroes(List<Hero> heroes) {
+        this.heroes = heroes;
+    }
+
+    @Override
+    public void onEvent(GameEvent event) {
+
+        if (heroes == null) return;
+
+        System.out.println("=== HERO STATUS ===");
+
+        for (Hero h : heroes) {
+
+            String status;
+
+            if (!h.isAlive()) {
+                status = "DEAD";
+            } else if (h.isLowHp()) {
+                status = "CRITICAL";
+            } else {
+                status = "HEALTHY";
+            }
+
+            System.out.println(h.getName() + " -> " + status);
+        }
+    }
+}
